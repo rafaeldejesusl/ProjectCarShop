@@ -1,11 +1,13 @@
 import { z } from 'zod';
-import { VehicleZodFrame } from './IVehicle';
+import { VehicleZodSchema } from './IVehicle';
 
-const CarZodFrame = VehicleZodFrame.extend({
-  doorsQty: z.number(),
-  seatsQty: z.number(),
+const message = 'Invalid input';
+
+const CarZodSchema = VehicleZodSchema.extend({
+  doorsQty: z.number().gte(2, { message }).lte(4, { message }),
+  seatsQty: z.number().gte(2, { message }).lte(7, { message }),
 });
 
-type ICar = z.infer<typeof CarZodFrame>;
+type ICar = z.infer<typeof CarZodSchema>;
 
-export { CarZodFrame, ICar };
+export { CarZodSchema, ICar };
