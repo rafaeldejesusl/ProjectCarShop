@@ -22,6 +22,9 @@ describe('Car Service', () => {
 		sinon.stub(carModel, 'update')
 			.onCall(0).resolves(carMockWithId)
 			.onCall(1).resolves(null);
+		sinon.stub(carModel, 'delete')
+			.onCall(0).resolves(carMockWithId)
+			.onCall(1).resolves(null);
 	})
 
 	after(() => {
@@ -88,6 +91,22 @@ describe('Car Service', () => {
 				await carService.update(carMockWithId._id, {} as any);
 			} catch (error) {
 				expect(error).to.be.instanceOf(ZodError);
+			}
+		});
+	});
+
+	describe('Delete Car', () => {
+		it('Success', async () => {
+			const car = await carService.delete(carMockWithId._id);
+
+			expect(car).to.be.deep.equal(carMockWithId);
+		});
+
+		it('Failure', async () => {
+			try {
+				await carService.delete(carMockWithId._id);
+			} catch (error:any) {
+				expect(error.message).to.be.deep.equal(ErrorTypes.ObjectNotFound);
 			}
 		});
 	});
