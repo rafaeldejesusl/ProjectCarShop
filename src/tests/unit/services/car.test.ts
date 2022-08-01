@@ -19,6 +19,9 @@ describe('Car Service', () => {
 		sinon.stub(carModel, 'readOne')
 			.onCall(0).resolves(carMockWithId)
 			.onCall(1).resolves(null);
+		sinon.stub(carModel, 'update')
+			.onCall(0).resolves(carMockWithId)
+			.onCall(1).resolves(null);
 	})
 
 	after(() => {
@@ -51,31 +54,41 @@ describe('Car Service', () => {
 
 	describe('Find Car', () => {
 		it('Success', async () => {
-			const carCreated = await carService.create(carMock);
+			const car = await carService.readOne(carMockWithId._id);
 
-			expect(carCreated).to.be.deep.equal(carMockWithId);
+			expect(car).to.be.deep.equal(carMockWithId);
 		});
 
 		it('Failure', async () => {
 			try {
-				await carService.create({} as any);
-			} catch (error) {
-				expect(error).to.be.instanceOf(ZodError);
+				await carService.readOne(carMockWithId._id);
+			} catch (error:any) {
+				expect(error.message).to.be.deep.equal(ErrorTypes.ObjectNotFound);
 			}
 		});
 	});
 
-	it('Success', async () => {
-		const carCreated = await carService.readOne(carMockWithId._id);
+	describe('Update Car', () => {
+		it('Success', async () => {
+			const carUpdated = await carService.update(carMockWithId._id, carMock);
 
-		expect(carCreated).to.be.deep.equal(carMockWithId);
-	});
+			expect(carUpdated).to.be.deep.equal(carMockWithId);
+		});
 
-	it('Failure', async () => {
-		try {
-			await carService.readOne(carMockWithId._id);
-		} catch (error:any) {
-			expect(error.message).to.be.deep.equal(ErrorTypes.ObjectNotFound);
-		}
+		it('Failure "Not Found"', async () => {
+			try {
+				await carService.update(carMockWithId._id, carMock);
+			} catch (error:any) {
+				expect(error.message).to.be.deep.equal(ErrorTypes.ObjectNotFound);
+			}
+		});
+
+		it('Failure "Invalid Object"', async () => {
+			try {
+				await carService.update(carMockWithId._id, {} as any);
+			} catch (error) {
+				expect(error).to.be.instanceOf(ZodError);
+			}
+		});
 	});
 });
