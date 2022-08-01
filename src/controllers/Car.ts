@@ -9,8 +9,9 @@ export default class CarController {
     req: Request & { body: ICar }, 
     res: Response<ICar>,
   ) {
-    const { model, year, color, buyValue, seatsQty, doorsQty } = req.body;
-    const car = { model, year, color, buyValue, seatsQty, doorsQty };
+    const { 
+      model, year, status, color, buyValue, seatsQty, doorsQty } = req.body;
+    const car = { model, year, color, buyValue, seatsQty, doorsQty, status };
     const results = await this._service.create(car);
     return res.status(201).json(results);
   }
@@ -35,8 +36,9 @@ export default class CarController {
     req: Request & { body: ICar },
     res: Response<ICar>,
   ) {
-    const { model, year, color, buyValue, seatsQty, doorsQty } = req.body;
-    const car = { model, year, color, buyValue, seatsQty, doorsQty };
+    const { 
+      model, year, status, color, buyValue, seatsQty, doorsQty } = req.body;
+    const car = { model, year, color, buyValue, seatsQty, doorsQty, status };
     const result = await this._service.update(req.params.id, car);
     return res.status(200).json(result);
   }

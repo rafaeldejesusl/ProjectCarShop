@@ -9,9 +9,11 @@ export default class MotorcycleController {
     req: Request & { body: IMotorcycle }, 
     res: Response<IMotorcycle>,
   ) {
-    const { model, year, color, buyValue, category, engineCapacity } = req.body;
+    const {
+      model, year, status, color,
+      buyValue, category, engineCapacity } = req.body;
     const motorcycle = {
-      model, year, color, buyValue, category, engineCapacity };
+      model, year, color, buyValue, category, engineCapacity, status };
     const results = await this._service.create(motorcycle);
     return res.status(201).json(results);
   }
@@ -36,9 +38,11 @@ export default class MotorcycleController {
     req: Request & { body: IMotorcycle },
     res: Response<IMotorcycle>,
   ) {
-    const { model, year, color, buyValue, category, engineCapacity } = req.body;
+    const {
+      model, year, color, buyValue,
+      category, engineCapacity, status } = req.body;
     const motorcycle = {
-      model, year, color, buyValue, category, engineCapacity };
+      model, year, color, buyValue, category, engineCapacity, status };
     const result = await this._service.update(req.params.id, motorcycle);
     return res.status(200).json(result);
   }
